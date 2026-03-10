@@ -1,9 +1,9 @@
 FROM ubuntu:24.04
 
-# Verhindere interaktive Prompts während apt-get install
+# Prevent interactive prompts during apt-get install
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Update und Installation der Build-Tools (C++20 fähig)
+# Update and install build tools (C++20 capable)
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
@@ -14,14 +14,14 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Arbeitsverzeichnis festlegen
+# Set working directory
 WORKDIR /app
 
-# Quellcode ins Image kopieren
+# Copy source code into the image
 COPY . /app
 
-# Execute-Rechte für das Start-Skript vergeben
+# Grant execute rights for the startup script
 RUN chmod +x run_project.sh
 
-# Skript als Entrypoint ausführen
+# Execute script as entrypoint
 ENTRYPOINT ["./run_project.sh"]

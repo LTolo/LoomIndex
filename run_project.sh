@@ -19,8 +19,8 @@ echo ""
 echo "==========================================="
 echo "        Running Crawler Demo"
 echo "==========================================="
-# Ausführen der kompilierten Hauptanwendung
-./build/LoomIndex
+# Execute the compiled main application passing all arguments
+./build/LoomIndex "$@"
 
 echo ""
 echo "==========================================="
