@@ -24,7 +24,7 @@ std::string Logger::level_to_string(LogLevel level) const {
     }
 }
 
-void Logger::log(LogLevel level, const std::string& message) {
+void Logger::log(LogLevel level, const std::string& message) const {
     std::lock_guard<std::mutex> lock(log_mutex_);
     
     std::string prefix = "[" + get_current_timestamp() + "] [" + level_to_string(level) + "] ";

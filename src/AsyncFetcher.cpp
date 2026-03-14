@@ -1,5 +1,6 @@
 #include "LoomIndex/AsyncFetcher.hpp"
 #include "LoomIndex/Logger.hpp"
+#include <iostream>
 
 namespace loom {
 

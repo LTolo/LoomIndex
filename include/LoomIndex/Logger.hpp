@@ -27,7 +27,7 @@ public:
     Logger(const Logger&) = delete;
     Logger& operator=(const Logger&) = delete;
 
-    void log(LogLevel level, const std::string& message);
+    void log(LogLevel level, const std::string& message) const;
     
     // Convenience wrappers
     static void info(const std::string& message) { get_instance().log(LogLevel::INFO, message); }
@@ -38,7 +38,7 @@ private:
     Logger() = default;
     ~Logger() = default;
 
-    std::mutex log_mutex_;
+    mutable std::mutex log_mutex_;
     std::string get_current_timestamp() const;
     std::string level_to_string(LogLevel level) const;
 };

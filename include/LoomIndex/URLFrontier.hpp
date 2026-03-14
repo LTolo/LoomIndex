@@ -6,7 +6,7 @@
 #include <condition_variable>
 #include <memory>
 #include <optional>
-#include "loomindex/BloomFilter.hpp"
+#include "LoomIndex/BloomFilter.hpp"
 
 namespace loom {
 

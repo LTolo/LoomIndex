@@ -7,7 +7,7 @@
 #include "LoomIndex/Logger.hpp"
 
 int main(int argc, char* argv[]) {
-    loom::Logger::info("Starting LoomIndex Crawler Demo...");
+    loom::Logger::info("LoomIndex v1.0 Starting...");
     
     std::vector<std::string> seeds;
     if (argc > 1) {
@@ -33,6 +33,7 @@ int main(int argc, char* argv[]) {
     engine.stop();
     engine_thread.join();
     
-    loom::Logger::info("Demo Shutdown Complete.");
+    loom::Logger::info("Crawl finished. " + std::to_string(engine.get_urls_processed()) + " URLs processed.");
+    
     return 0;
 }

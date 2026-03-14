@@ -88,6 +88,7 @@ void CrawlerEngine::on_page_fetched(const FetchResult& result) {
         return;
     }
 
+    urls_processed_++;
     Logger::info("Successfully fetched: " + result.url + " (" + std::to_string(result.body.size()) + " bytes)");
 
     // Very naive link extraction

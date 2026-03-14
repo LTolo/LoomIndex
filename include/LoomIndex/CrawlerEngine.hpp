@@ -6,8 +6,8 @@
 #include <string>
 #include <atomic>
 
-#include "loomindex/URLFrontier.hpp"
-#include "loomindex/AsyncFetcher.hpp"
+#include "LoomIndex/URLFrontier.hpp"
+#include "LoomIndex/AsyncFetcher.hpp"
 
 namespace loom {
 
@@ -40,9 +40,17 @@ public:
      */
     void stop();
 
+    /**
+     * @brief Returns the number of successfully processed URLs.
+     */
+    [[nodiscard]] std::size_t get_urls_processed() const {
+        return urls_processed_.load();
+    }
+
 private:
     std::size_t num_threads_;
     std::atomic<bool> is_running_{false};
+    std::atomic<std::size_t> urls_processed_{0};
     
     std::shared_ptr<URLFrontier> frontier_;
     std::unique_ptr<AsyncFetcher> fetcher_; // Or one per thread depending on architecture

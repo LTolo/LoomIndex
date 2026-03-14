@@ -1,20 +1,19 @@
-# LoomIndex
+# LoomIndex – High-Performance Concurrent Web Crawler
 
-**LoomIndex** is a lightweight, high-performance, and concurrent web crawler developed in modern C++ (C++20). It is designed with a strong focus on thread safety, memory efficiency (RAII), and asynchronous I/O operations.
+**LoomIndex** is a lightweight, high-performance, and concurrent web crawler developed in modern C++ (C++20). Engineered for speed and scalability, it serves as a robust foundation for high-throughput web scraping and data indexing projects.
 
-## 🚀 Features
+## ✨ Key Features
 
-* **Multi-Threading:** Native C++20 Thread-Pool implementation.
-* **Asynchronous I/O:** Scalable, non-blocking HTTP requests via `libcurl` (`curl_multi`).
-* **High Memory Efficiency:** Utilizes an integrated **Bloom Filter** for $O(k)$ URL deduplication, minimizing RAM usage compared to traditional `std::unordered_set` approaches.
-* **Thread Safety & RAII:** Robust `URLFrontier` using mutexes and condition variables; safe resource management (sockets, FDs) thanks to smart pointers.
-* **Graceful Shutdown:** Reactive shutdown system for all active tasks and sockets.
+* **Asynchronous I/O:** Leverages `libcurl` (`curl_multi`) for scalable, non-blocking HTTP requests, capable of handling dozens of concurrent connections efficiently.
+* **Custom Thread Pool:** Native C++20 thread-pool implementation that safely dispatches parser and processor workloads.
+* **Memory-efficient Bloom Filter:** Integrates a built-in Bloom Filter for rapid URL deduplication, drastically reducing RAM constraints compared to traditional hash sets.
+* **Docker Support:** Fully containerized environment for instant, reproducible builds and zero-config execution.
 
 ---
 
 ## 🏗 Architecture
 
-The module design is based on a clear Producer-Consumer pattern:
+The system is built on a reliable multi-threaded Producer-Consumer model, ensuring a clear separation of concerns between network I/O and data processing:
 
 ```mermaid
 graph TD;
@@ -34,62 +33,71 @@ graph TD;
     style BF fill:#bbf,stroke:#333,stroke-width:2px;
 ```
 
-### Component Overview
+---
 
-1. **`CrawlerEngine`**: Orchestrates the entire crawl process, boots the ThreadPool, and drives the `AsyncFetcher` I/O loop.
-2. **`URLFrontier`**: A blocking queue (`std::condition_variable`) through which worker threads can safely receive new URLs.
-3. **`BloomFilter`**: Checks URLs *before* they enter the queue. The algorithmic complexity is **$O(k)$** (where *k* is the number of constant hash functions). It offers a configurable false-positive rate (e.g., 1%).
-4. **`AsyncFetcher`**: A wrapper layer around libcurl's `multi_handle`. Handles dozens of parallel HTTP requests in a dedicated asynchronous event loop.
+## � Live Demo & Output
+
+![LoomIndex Startup & Crawl Log](docs/images/crawl_log.png)
+
+![Bloom Filter Efficiency Stats](docs/images/stats_output.png)
 
 ---
 
-## 💻 Build Instructions
+## Prerequisites
 
-### Prerequisites
-* A C++20 capable compiler (GCC 10+, Clang 10+, MSVC 19.29+).
-* **CMake** (Version 3.20 or newer).
-* **libcurl** (Development packages like `libcurl4-openssl-dev` installed).
-* (GoogleTest is fetched automatically via CMake FetchContent).
+### Dependencies
 
-### Compiling (Linux/macOS/WSL)
+* **`libcurl4-openssl-dev`** (Ubuntu/Debian) or **`libcurl`** (macOS via Homebrew)
+* **`cmake`**
+* **GoogleTest** (Fetched automatically via CMake FetchContent)
+
+---
+
+## �🚀 How to Run
+
+### Using Docker (Highly Recommended)
+
+The easiest way to build and run the crawler demo without configuring your local C++ environment is via Docker. Provide URLs as arguments, or let it default to `https://example.com`.
+
+```bash
+# Build the Docker image
+docker build -t loomindex .
+
+# Run the containerized demo application (fallback seed)
+docker run --rm loomindex
+
+# Run with custom URLs
+docker run --rm loomindex https://github.com https://wikipedia.org
+```
+
+### Building via CMake (Linux/macOS/WSL)
+
+If you have a C++20 compiler and `libcurl` (`libcurl4-openssl-dev`) installed, you can build natively:
 
 ```bash
 git clone https://github.com/yourusername/LoomIndex.git
 cd LoomIndex
 
-# Configure build
+# Generate Makefiles and Build
 cmake -B build -DCMAKE_BUILD_TYPE=Release
-
-# Compile
 cmake --build build -j$(nproc)
 
-# (Optional) Run unit tests
+# Run Unit Tests
 cd build
 ctest --output-on-failure
-```
+cd ..
 
-### Running with Docker (Recommended)
-
-The easiest method to evaluate the entire project, including unit tests and a live demo, is using the provided Docker container. The Docker image is based on Ubuntu and automatically installs CMake, G++, and `libcurl`.
-
-```bash
-# Build Docker image
-docker build -t loomindex .
-
-# Run container (Builds CMake, runs GTest, and starts the demo)
-docker run --rm loomindex
+# Run the crawler
+./build/LoomIndex https://example.com
 ```
 
 ---
 
-## 📊 Algorithmic Complexity
+## 📂 Project Structure
 
-The use of the **Bloom Filter** is the core component of LoomIndex's scalability. 
-A classic hash set grows linearly $O(n)$ in memory requirement per known URL.
-The Bloom Filter reduces this to constant-like sizes, at the cost of a slight *false-positive* rate $\epsilon$.
-
-* **Insertion (`add`):** $O(k)$ bit operations.
-* **Lookup (`possibly_contains`):** $O(k)$ bit operations.
-* **Memory ($m$ bits):** $m = -\frac{n \ln \epsilon}{(\ln 2)^2}$
-
-This allows LoomIndex to manage millions of visited URLs with just a few megabytes of RAM.
+* **`include/LoomIndex/`**: Public header files defining the core components (`CrawlerEngine`, `ThreadPool`, `BloomFilter`, etc.).
+* **`src/`**: Implementation files for the C++ components, including the `main.cpp` entrypoint.
+* **`tests/`**: GoogleTest framework unit tests validating concurrent behavior and data structures.
+* **`CMakeLists.txt`**: Top-level build configuration.
+* **`run_project.sh`**: Helper script to compile, unit-test, and run the binary sequentially.
+* **`Dockerfile`**: Container definition for encapsulated builds and execution.
