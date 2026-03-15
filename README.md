@@ -88,7 +88,7 @@ docker run --rm loomindex https://github.com https://wikipedia.org
 If you have a C++20 compiler and `libcurl` (`libcurl4-openssl-dev`) installed, you can build natively:
 
 ```bash
-git clone https://github.com/yourusername/LoomIndex.git
+git clone https://github.com/LTolo/LoomIndex.git
 cd LoomIndex
 
 # Generate Makefiles and Build
