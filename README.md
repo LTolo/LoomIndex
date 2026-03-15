@@ -44,13 +44,13 @@ The following trace shows the engine in action: initializing the **Thread Pool**
 
 ![Live Crawler Execution](docs/images/crawl_demo.png)
 
-### 🛡️ Quality Assurance & Stability
-Reliability is a core pillar of this project. Every component—from the `URLFrontier` to the `AsyncFetcher`—is covered by unit tests.
+### 🛡️ Quality & Stability
+Reliability is a core pillar of LoomIndex. We use **GoogleTest** to ensure every component works as expected.
 
-| Feature | Validation Stage | Result |
-|:--- |:--- |:--- |
-| **Unit Testing** | GoogleTest Suite | ![Tests Passed](docs/images/unit_tests.png) |
-| **Lifecycle** | Graceful Shutdown | ![Final Success](docs/images/final_success.png) |
+| Component | Test Result |
+|:--- |:--- |
+| **Core Logic** (Bloom Filter, ThreadPool, URLFrontier) | ![Tests Passed](docs/images/unit_tests.png) |
+| **System Lifecycle** (Startup to Graceful Shutdown) | ![Final Success](docs/images/final_success.png) |
 
 > **Technical Note:** The test suite validates the Bloom Filter's false positive rate and ensures thread safety across the `CrawlerEngine`.
 
