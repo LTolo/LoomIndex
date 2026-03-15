@@ -2,7 +2,7 @@
 
 **LoomIndex** is a lightweight, high-performance, and concurrent web crawler developed in modern C++ (C++20). Engineered for speed and scalability, it serves as a robust foundation for high-throughput web scraping and data indexing projects.
 
-## ✨ Key Features
+## Key Features
 
 * **Asynchronous I/O:** Leverages `libcurl` (`curl_multi`) for scalable, non-blocking HTTP requests, capable of handling dozens of concurrent connections efficiently.
 * **Custom Thread Pool:** Native C++20 thread-pool implementation that safely dispatches parser and processor workloads.
@@ -35,11 +35,24 @@ graph TD;
 
 ---
 
-## � Live Demo & Output
+## 📊 Showcase & Validation
 
-![LoomIndex Startup & Crawl Log](docs/images/crawl_log.png)
+To ensure both performance and reliability, LoomIndex is backed by a comprehensive test suite and detailed logging.
 
-![Bloom Filter Efficiency Stats](docs/images/stats_output.png)
+### Live Crawler Demo
+The following trace shows the engine in action: initializing the **Thread Pool**, processing URLs asynchronously, and utilizing the **Bloom Filter** to skip redundant links in $O(1)$ time.
+
+![Live Crawler Execution](docs/images/crawl_demo.png)
+
+### 🛡️ Quality Assurance & Stability
+Reliability is a core pillar of this project. Every component—from the `URLFrontier` to the `AsyncFetcher`—is covered by unit tests.
+
+| Feature | Validation Stage | Result |
+|:--- |:--- |:--- |
+| **Unit Testing** | GoogleTest Suite | ![Tests Passed](docs/images/unit_tests.png) |
+| **Lifecycle** | Graceful Shutdown | ![Final Success](docs/images/final_success.png) |
+
+> **Technical Note:** The test suite validates the Bloom Filter's false positive rate and ensures thread safety across the `CrawlerEngine`.
 
 ---
 
@@ -53,7 +66,7 @@ graph TD;
 
 ---
 
-## �🚀 How to Run
+## How to Run
 
 ### Using Docker (Highly Recommended)
 
